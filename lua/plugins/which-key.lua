@@ -53,6 +53,7 @@ local spec = {
     { "<C-c>", "y", desc = "Copy", mode = "v", icon = "" },
     { "<C-v>", '"_dP', desc = "Paste", mode = "v", icon = "" },
     { "<C-x>", "x", desc = "Cut", mode = "v", icon = "󰆐" },
+    { "<C-z>", "o<Esc>u", desc = "Undo", mode = "v", icon = "󰕌" },
 
     -- Sensible keybinds (normal and visual mode)
     { "c", '"_c', desc = "Change", mode = { "n", "v" } },
