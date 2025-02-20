@@ -17,5 +17,6 @@ require("core").setup({
     modules = {
         "config.autocommands",
         "config.keymaps",
+        "config.spelling",
     },
 })
