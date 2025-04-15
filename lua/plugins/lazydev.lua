@@ -1,9 +1,27 @@
 return {
     {
         "folke/lazydev.nvim",
-        opts = function(_, opts)
-            opts.library = opts.library or {}
-            opts.library[#opts.library + 1] = "~/.local/share/lua/factorio/"
-        end,
+        opts = {
+            library = {
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                "~/.local/share/lua/factorio/",
+            },
+        },
+        ft = { "lua" },
+    },
+    {
+        "saghen/blink.cmp",
+        opts = {
+            sources = {
+                default = { "lazydev" },
+                providers = {
+                    lazydev = {
+                        name = "LazyDev",
+                        fallbacks = { "lsp" },
+                        module = "lazydev.integrations.blink",
+                    },
+                },
+            },
+        },
     },
 }

@@ -15,8 +15,22 @@ local spec = {
 
     -- Diagnostics
     { "<leader>q", vim.diagnostic.setloclist, desc = "Quickfix list", icon = { icon = "", color = "blue" } },
-    { "[d", vim.diagnostic.goto_prev, desc = "Previous diagnostic message", icon = "" },
-    { "]d", vim.diagnostic.goto_next, desc = "Next diagnostic message", icon = "" },
+    {
+        "[d",
+        function()
+            vim.diagnostic.jump({ count = -1, float = true })
+        end,
+        desc = "Previous diagnostic message",
+        icon = "",
+    },
+    {
+        "]d",
+        function()
+            vim.diagnostic.jump({ count = 1, float = true })
+        end,
+        desc = "Next diagnostic message",
+        icon = "",
+    },
     {
         "<leader>e",
         vim.diagnostic.open_float,
@@ -109,7 +123,9 @@ local spec = {
 
 return {
     "folke/which-key.nvim",
+    dependencies = { "echasnovski/mini.icons" },
     opts = {
         spec = spec,
     },
+    event = { "VeryLazy" },
 }

@@ -6,8 +6,11 @@ return {
     opts = {
         views = {
             cmdline_popup = {
-                border = { style = "single" } },
-                popupmenu = { border = { style = "single" } },
+                border = { style = "single" },
+            },
+            popupmenu = {
+                border = { style = "single" },
+            },
         },
     },
     event = { "VeryLazy" },

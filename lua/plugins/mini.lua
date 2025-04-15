@@ -11,13 +11,14 @@ return {
         opts = {
             view = {
                 style = "sign",
-                signs = { add = '│', change = '│', delete = '│' },
+                signs = { add = "│", change = "│", delete = "│" },
             },
         },
         event = { "VeryLazy" },
     },
     {
         "echasnovski/mini.icons",
+        version = false,
         opts = {
             filetype = {
                 php = { glyph = "" },

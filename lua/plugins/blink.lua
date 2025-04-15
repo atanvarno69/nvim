@@ -1,5 +1,26 @@
 return {
     "saghen/blink.cmp",
+    version = "v0.*",
+    dependencies = {
+        {
+            "L3MON4D3/LuaSnip",
+            version = "v2.*",
+            build = "make install_jsregexp",
+            dependencies = {
+                {
+                    "rafamadriz/friendly-snippets",
+                    config = function()
+                        require("luasnip.loaders.from_vscode").lazy_load()
+                        require("luasnip.loaders.from_vscode").lazy_load({
+                            paths = { vim.fn.stdpath("config") .. "/snippets" },
+                        })
+                    end,
+                },
+            },
+            opts = {},
+            lazy = true,
+        },
+    },
     opts = {
         appearance = {
             nerd_font_variant = "normal",
@@ -50,5 +71,13 @@ return {
             ["<C-Up>"] = { "scroll_documentation_up", "fallback" },
             ["<C-Down>"] = { "scroll_documentation_down", "fallback" },
         },
+        sources = {
+            default = { "lsp", "path", "snippets", "buffer" },
+        },
+        snippets = {
+            preset = "luasnip",
+        },
     },
+    opts_extend = { "sources.default" },
+    event = { "BufEnter" },
 }

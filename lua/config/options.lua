@@ -1,5 +1,4 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = "//"
+-- NOTE: Set leader and localleader in lazy.lua
 
 -- Make line numbers default
 vim.opt.number = true
@@ -81,4 +80,3 @@ vim.diagnostic.config({
         },
     },
 })
-

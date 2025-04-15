@@ -1,10 +1,3 @@
-vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function(args)
-        require("conform").format({ bufnr = args.buf })
-    end,
-})
-
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking (copying) text",
     group = vim.api.nvim_create_augroup("highlight-on-yank", { clear = true }),
@@ -29,12 +22,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     desc = "LSP functionality",
     group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
     callback = function(event)
-        vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = event.buf,
-            callback = function()
-                require("conform").format({ async = false, lsp_fallback = true })
-            end,
-        })
         local wk = require("which-key")
         wk.add({
             { "<leader>l", group = "LSP", icon = { icon = "", color = "cyan" } },

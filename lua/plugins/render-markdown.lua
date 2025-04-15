@@ -71,8 +71,8 @@ return {
                 providers = {
                     markdown = {
                         name = "RenderMarkdown",
-                        module = "render-markdown.integ.blink",
                         fallbacks = { "lsp" },
+                        module = "render-markdown.integ.blink",
                     },
                 },
             },

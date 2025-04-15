@@ -84,7 +84,7 @@ function M.lsp()
     for _, client in ipairs(clients) do
         local filetypes = client.config.filetypes
         if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-            local icon, hl, _ = require("mini.icons").get("filetype", buf_ft)
+            local icon, _, _ = require("mini.icons").get("filetype", buf_ft)
             return icon .. " " .. client.name
         end
     end
