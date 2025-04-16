@@ -4,17 +4,11 @@ return {
     main = "nvim-treesitter.configs",
     opts = {
         ensure_installed = {
-            "bash",
             "c",
             "diff",
             "html",
-            "lua",
             "luadoc",
-            "markdown",
-            "markdown_inline",
             "query",
-            "regex",
-            "vim",
             "vimdoc",
         },
         auto_install = true,
@@ -30,4 +24,5 @@ return {
             disable = { "ruby" },
         },
     },
+    opts_extend = { "ensure_installed" },
 }
