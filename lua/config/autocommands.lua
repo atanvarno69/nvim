@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
             { "<leader>lw", vim.lsp.buf.workspace_symbol, desc = "List workspace symbols", icon = { icon = "󱉯" } },
         })
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             wk.add({
                 {
                     "<leader>l<Tab>",
