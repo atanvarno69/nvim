@@ -1,12 +1,12 @@
 return {
     {
-        "echasnovski/mini.ai",
+        "nvim-mini/mini.ai",
         version = false,
         opts = {},
         event = { "VeryLazy" },
     },
     {
-        "echasnovski/mini.diff",
+        "nvim-mini/mini.diff",
         version = false,
         opts = {
             view = {
@@ -17,7 +17,7 @@ return {
         event = { "VeryLazy" },
     },
     {
-        "echasnovski/mini.icons",
+        "nvim-mini/mini.icons",
         version = false,
         opts = {
             filetype = {
@@ -27,13 +27,13 @@ return {
         event = { "VeryLazy" },
     },
     {
-        "echasnovski/mini.pairs",
+        "nvim-mini/mini.pairs",
         version = false,
         opts = {},
         event = { "VeryLazy" },
     },
     {
-        "echasnovski/mini.surround",
+        "nvim-mini/mini.surround",
         version = false,
         opts = {},
         event = { "VeryLazy" },

@@ -4,7 +4,7 @@ local palette = require("catppuccin.palettes").get_palette("mocha")
 return {
     "nvim-lualine/lualine.nvim",
     dependencies = {
-        "echasnovski/mini.icons",
+        "nvim-mini/mini.icons",
     },
     opts = {
         options = {

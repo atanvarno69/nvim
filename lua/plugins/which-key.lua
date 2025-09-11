@@ -123,7 +123,7 @@ local spec = {
 
 return {
     "folke/which-key.nvim",
-    dependencies = { "echasnovski/mini.icons" },
+    dependencies = { "nvim-mini/mini.icons" },
     opts = {
         spec = spec,
     },

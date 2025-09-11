@@ -3,7 +3,7 @@ return {
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
-            "echasnovski/mini.icons",
+            "nvim-mini/mini.icons",
         },
         opts = {
             heading = {
@@ -50,13 +50,18 @@ return {
             link = {
                 email = " ",
             },
+            completions = {
+                lsp = {
+                    enabled = true,
+                },
+            },
         },
         ft = "markdown",
         keys = {
             {
                 "<leader>m",
                 function()
-                    require("render-markdown").toggle()
+                    require("render-markdown").buf_toggle()
                 end,
                 mode = "n",
                 desc = "Toggle markdown rendering",

@@ -10,7 +10,9 @@ return {
         flavour = "mocha",
         default_integrations = false,
         integrations = {
-            blink_cmp = true,
+            blink_cmp = {
+                style = "bordered",
+            },
             gitsigns = true,
             mason = true,
             mini = {
