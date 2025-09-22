@@ -6,7 +6,7 @@ return {
     settings = {
         css = {
             validate = true,
-            format = { newlineBetweenSelectors = false },
+            format = { enable = true, newlineBetweenSelectors = false },
         },
         scss = {
             validate = true,

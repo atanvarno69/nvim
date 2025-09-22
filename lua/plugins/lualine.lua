@@ -1,40 +1,116 @@
-local extension = require("plugins.lualine.extension")
 local palette = require("catppuccin.palettes").get_palette("mocha")
+
+local function git_compact(absolute_path)
+    local git_dir = require("lualine.components.branch.git_branch").find_git_dir()
+    if git_dir == nil or git_dir == "" then
+        return absolute_path
+    end
+    local git_root = vim.fs.dirname(git_dir)
+    return absolute_path:sub(git_root:len() + 2)
+end
+
+local function home_compact(absolute_path)
+    local home = os.getenv("HOME")
+    if home == nil then
+        return absolute_path
+    end
+    local start, _ = absolute_path:find(home)
+    if start ~= 1 then
+        return absolute_path
+    end
+    return "~" .. absolute_path:sub(home:len() + 1, absolute_path:len())
+end
+
+local function is_new_file()
+    local filename = vim.fn.expand("%")
+    return filename ~= "" and vim.bo.buftype == "" and vim.fn.filereadable(filename) == 0
+end
+
+local function filename()
+    local abs_path = vim.fn.expand("%:p")
+    local name = git_compact(abs_path)
+    if name == abs_path then
+        name = home_compact(abs_path)
+    end
+    name = name .. ":%l:%c"
+    if vim.bo.modified then
+        name = name .. " "
+    end
+    if vim.bo.modifiable == false or vim.bo.readonly == true then
+        name = name .. " "
+    end
+    if is_new_file() then
+        name = name .. " "
+    end
+    return name
+end
+
+local function lsp_name()
+    local output = ""
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    if next(clients) == nil then
+        return output
+    end
+    for index, client in ipairs(clients) do
+        if index < #clients then
+            output = output .. " "
+        end
+        output = output .. client.name
+    end
+    return output
+end
+
+local function repository()
+    local git_dir = require("lualine.components.branch.git_branch").find_git_dir()
+    if git_dir == nil or git_dir == "" then
+        return ""
+    end
+    return vim.fs.basename(vim.fs.dirname(git_dir))
+end
+
+local function word_count()
+    return tostring(vim.fn.wordcount().words)
+end
 
 return {
     "nvim-lualine/lualine.nvim",
-    dependencies = {
-        "nvim-mini/mini.icons",
-    },
+    dependencies = { "nvim-mini/mini.icons" },
     opts = {
         options = {
-            theme = "catppuccin",
-            component_separators = { left = "", right = "" },
-            section_separators = { left = "", right = "" },
+            component_separators = { left = " ", right = " " },
+            section_separators = { left = " ", right = " " },
             always_divide_middle = false,
             globalstatus = true,
             padding = 0,
         },
         sections = {
-            lualine_a = { { "mode", icon = "", padding = 1 } },
+            lualine_a = {
+                { "mode", icon = "", padding = 1 },
+            },
             lualine_b = {
                 {
-                    extension.repo_name,
+                    repository,
                     color = { fg = palette.blue, bg = palette.surface0 },
-                    icon = extension.opts.repository.icon,
-                    padding = 1,
+                    icon = "",
                 },
-                { "branch", color = { fg = palette.green, bg = palette.surface0 }, icon = "", padding = { right = 1 } },
-                { "diff", symbols = { added = " ", modified = " ", removed = " " }, padding = { right = 1 } },
+                {
+                    "branch",
+                    color = { fg = palette.green, bg = palette.surface0 },
+                    icon = "",
+                    padding = { right = 1 },
+                },
+                {
+                    "diff",
+                    symbols = { added = " ", modified = " ", removed = " " },
+                    padding = { right = 1 },
+                },
             },
             lualine_c = {
-                { "filetype", icon_only = true, padding = { left = 1 } },
-                { extension.filename, padding = { right = 1 } },
+                { filename },
                 { "progress" },
             },
             lualine_x = {
-                { "tostring(vim.fn.wordcount().words)", icon = "", padding = { right = 1 } },
-                { "encoding", icon = "", padding = { right = 1 } },
+                { word_count, icon = "" },
             },
             lualine_y = {
                 {
@@ -43,11 +119,25 @@ return {
                     symbols = { error = " ", warn = " ", info = " ", hint = " " },
                     padding = { left = 1 },
                 },
-                { extension.lsp, padding = 1 },
+                {
+                    "filetype",
+                    colored = true,
+                    icon_only = true,
+                    icon = { align = "left" },
+                    padding = { left = 1 },
+                },
+                { lsp_name, padding = { right = 1 } },
             },
             lualine_z = {},
         },
-        inactive_sections = { lualine_c = {} },
+        inactive_sections = {
+            lualine_a = {},
+            lualine_b = {},
+            lualine_c = { "filename" },
+            lualine_x = {},
+            lualine_y = {},
+            lualine_z = {},
+        },
         tabline = {
             lualine_b = {
                 {
@@ -62,12 +152,14 @@ return {
                     },
                     filetype_names = {
                         oil = "Oil",
-                        lazy = "󰒲 Lazy",
+                        lazy = "Lazy",
+                        mason = "Mason",
                     },
                     padding = 1,
                 },
             },
-            lualine_c = { { "", draw_empty = true } },
+            lualine_x = {},
+            lualine_y = {},
         },
     },
     event = { "VeryLazy" },

@@ -2,11 +2,18 @@ return {
     {
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = {
-            "nvim-treesitter/nvim-treesitter",
             "nvim-mini/mini.icons",
+            "nvim-treesitter/nvim-treesitter",
         },
         opts = {
+            restart_highlighter = true,
+            latex = { enabled = false },
+            completions = {
+                lsp = { enabled = true },
+                blink = { enabled = true },
+            },
             heading = {
+                sign = false,
                 icons = { " " },
                 position = "inline",
                 width = "block",
@@ -14,47 +21,19 @@ return {
             },
             code = {
                 sign = true,
-                style = "full",
                 width = "block",
                 min_width = 119,
                 left_pad = 1,
-                above = "▄",
-                below = "▀",
+                border = "thick",
             },
             dash = {
                 icon = "─",
                 width = 120,
             },
             bullet = { icons = { "•", "◦", "‣", "⁃" } },
-            checkbox = {
-                unchecked = { icon = "  " },
-                checked = { icon = "  " },
-            },
             quote = { icon = "▌" },
-            pipe_table = {
-                border = {
-                    "┌",
-                    "┬",
-                    "┐",
-                    "├",
-                    "┼",
-                    "┤",
-                    "└",
-                    "┴",
-                    "┘",
-                    "│",
-                    "─",
-                },
-                alignment_indicator = "━",
-            },
-            link = {
-                email = " ",
-            },
-            completions = {
-                lsp = {
-                    enabled = true,
-                },
-            },
+            link = { email = " " },
+            html = { enabled = false },
         },
         ft = "markdown",
         keys = {

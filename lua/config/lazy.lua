@@ -1,27 +1,13 @@
 local leader = " "
-local local_leader = "\\"
+local localleader = "\\"
 local opts = {
-    spec = {
-        { import = "plugins" },
-    },
-    install = {
-        colorscheme = { "catppuccin", "default" },
-    },
-    checker = {
-        enabled = true,
-        notify = false,
-    },
-    performance = {
-        rtp = {
-            disabled_plugins = { "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" },
-        },
-    },
-    rocks = {
-        enabled = false,
-    },
+    spec = { { import = "plugins" } },
+    install = { colorscheme = { "catppuccin", "default" } },
+    checker = { enabled = true },
+    rocks = { enabled = false },
 }
 
--- WARN: Do not edit beyond here.
+-- WARN: Do NOT edit below this line
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -38,5 +24,5 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = leader
-vim.g.maplocalleader = local_leader
+vim.g.maplocalleader = localleader
 require("lazy").setup(opts)

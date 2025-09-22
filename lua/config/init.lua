@@ -1,5 +1,6 @@
-require("config.options")
 require("config.lazy")
-require("config.autocommands")
 require("config.lsp")
+require("config.options")
+require("config.diagnostics")
+require("config.autocommands")
 require("config.spelling")

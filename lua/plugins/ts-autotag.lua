@@ -7,8 +7,5 @@ return {
             enable_close_on_slash = true,
         },
     },
-    event = {
-        "BufNewFile",
-        "BufReadPre",
-    },
+    event = { "BufNewFile", "BufReadPre" },
 }

@@ -21,13 +21,13 @@ return {
     event = { "BufEnter", "BufNew" },
     keys = {
         {
-            "<leader>c",
+            "<leader>|",
             function()
                 require("virt-column").update({ enabled = not vim.g.virt_column_enabled })
                 vim.g.virt_column_enabled = not vim.g.virt_column_enabled
                 vim.cmd("redraw!")
             end,
-            desc = "Toggle virt column",
+            desc = "Toggle virtual column",
             mode = "n",
         },
     },
