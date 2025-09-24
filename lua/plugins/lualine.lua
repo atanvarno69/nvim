@@ -46,13 +46,16 @@ local function filename()
 end
 
 local function lsp_name()
-    local output = ""
     local clients = vim.lsp.get_clients({ bufnr = 0 })
     if next(clients) == nil then
-        return output
+        return ""
     end
+    if #clients == 1 then
+        return clients[1].name
+    end
+    local output = ""
     for index, client in ipairs(clients) do
-        if index < #clients then
+        if index ~= 1 then
             output = output .. " "
         end
         output = output .. client.name
@@ -164,15 +167,15 @@ return {
     },
     event = { "VeryLazy" },
     keys = {
-        { "<C-1>", "<Cmd>LualineBuffersJump! 1<CR>", desc = "Buffer 1", mode = { "n", "i" } },
-        { "<C-2>", "<Cmd>LualineBuffersJump! 2<CR>", desc = "Buffer 2", mode = { "n", "i" } },
-        { "<C-3>", "<Cmd>LualineBuffersJump! 3<CR>", desc = "Buffer 3", mode = { "n", "i" } },
-        { "<C-4>", "<Cmd>LualineBuffersJump! 4<CR>", desc = "Buffer 4", mode = { "n", "i" } },
-        { "<C-5>", "<Cmd>LualineBuffersJump! 5<CR>", desc = "Buffer 5", mode = { "n", "i" } },
-        { "<C-6>", "<Cmd>LualineBuffersJump! 6<CR>", desc = "Buffer 6", mode = { "n", "i" } },
-        { "<C-7>", "<Cmd>LualineBuffersJump! 7<CR>", desc = "Buffer 7", mode = { "n", "i" } },
-        { "<C-8>", "<Cmd>LualineBuffersJump! 8<CR>", desc = "Buffer 8", mode = { "n", "i" } },
-        { "<C-9>", "<Cmd>LualineBuffersJump! 9<CR>", desc = "Buffer 9", mode = { "n", "i" } },
+        { "<C-1>", "<Cmd>LualineBuffersJump! 1<CR>", desc = "Buffer 1",    mode = { "n", "i" } },
+        { "<C-2>", "<Cmd>LualineBuffersJump! 2<CR>", desc = "Buffer 2",    mode = { "n", "i" } },
+        { "<C-3>", "<Cmd>LualineBuffersJump! 3<CR>", desc = "Buffer 3",    mode = { "n", "i" } },
+        { "<C-4>", "<Cmd>LualineBuffersJump! 4<CR>", desc = "Buffer 4",    mode = { "n", "i" } },
+        { "<C-5>", "<Cmd>LualineBuffersJump! 5<CR>", desc = "Buffer 5",    mode = { "n", "i" } },
+        { "<C-6>", "<Cmd>LualineBuffersJump! 6<CR>", desc = "Buffer 6",    mode = { "n", "i" } },
+        { "<C-7>", "<Cmd>LualineBuffersJump! 7<CR>", desc = "Buffer 7",    mode = { "n", "i" } },
+        { "<C-8>", "<Cmd>LualineBuffersJump! 8<CR>", desc = "Buffer 8",    mode = { "n", "i" } },
+        { "<C-9>", "<Cmd>LualineBuffersJump! 9<CR>", desc = "Buffer 9",    mode = { "n", "i" } },
         { "<C-0>", "<Cmd>LualineBuffersJump! $<CR>", desc = "Last buffer", mode = { "n", "i" } },
     },
 }
