@@ -1,6 +1,0 @@
-require("config.lazy")
-require("config.lsp")
-require("config.options")
-require("config.diagnostics")
-require("config.autocommands")
-require("config.spelling")
