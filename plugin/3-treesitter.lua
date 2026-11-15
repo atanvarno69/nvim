@@ -5,6 +5,7 @@ local languages = {
     "css",
     "diff",
     "dockerfile",
+    "ebnf",
     "git_config",
     "git_rebase",
     "gitattributes",
