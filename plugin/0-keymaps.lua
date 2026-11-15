@@ -21,7 +21,7 @@ local function smart_quit()
     if #listed_buffers == 1 then
         vim.cmd("quit")
     else
-        vim.cmd("bdelete")
+        require("mini.bufremove").delete(0, false)
     end
 end
 

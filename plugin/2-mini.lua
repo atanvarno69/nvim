@@ -6,6 +6,9 @@ vim.pack.add({
 require("mini.icons").setup()
 MiniIcons.mock_nvim_web_devicons()
 
+-- bufremove
+require("mini.bufremove").setup({ silent = true })
+
 -- ai
 require("mini.ai").setup()
 
