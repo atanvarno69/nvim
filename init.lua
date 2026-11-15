@@ -1,3 +1,8 @@
+-- en.nvim is a local dev plugin (not a git repo, so vim.pack.add can't load
+-- it -- see plugin/en.lua). Must be prepended here, before ftdetect scripts
+-- are scanned at startup, for its ftdetect/en.lua to take effect.
+vim.opt.rtp:prepend("~/dev/en4/en.nvim")
+
 -- Line numbers
 vim.o.number = true
 
