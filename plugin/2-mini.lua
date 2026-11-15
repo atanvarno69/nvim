@@ -32,6 +32,13 @@ require("mini.clue").setup({
     },
 })
 
+-- Notifications
+require("mini.notify").setup({
+    lsp_progress = { enable = false },
+    window = { config = { border = "single" } },
+})
+vim.notify = MiniNotify.make_notify()
+
 -- Git
 require("mini.git").setup()
 

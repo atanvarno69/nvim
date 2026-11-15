@@ -3,9 +3,8 @@ vim.pack.add({
     "https://github.com/lukas-reineke/virt-column.nvim",
     "https://github.com/kevinhwang91/promise-async",
     "https://github.com/kevinhwang91/nvim-ufo",
-    "https://github.com/MunifTanjim/nui.nvim",
-    "https://github.com/folke/noice.nvim",
     "https://github.com/folke/snacks.nvim",
+    "https://github.com/j-hui/fidget.nvim",
 }, { confirm = false })
 
 vim.g.virt_column_enabled = true
@@ -110,16 +109,17 @@ require("ufo").setup({
     fold_virt_text_handler = fold_virt_text_handler,
 })
 
-require("noice").setup({
-    views = {
-        cmdline_popup = {
-            border = { style = "single" },
-        },
-        popupmenu = {
-            border = { style = "single" },
-        },
-    },
+-- Native UI: ui2 replaces the message/cmdline grid
+vim.o.winborder = "single"
+vim.o.cmdheight = 0
+vim.o.showmode = false
+vim.o.showcmd = false
+vim.o.shortmess = vim.o.shortmess:gsub("S", "")
+require("vim._core.ui2").enable({
+    msg = { target = "msg" },
 })
+
+require("fidget").setup({})
 
 require("snacks").setup({
     bigfile = { enabled = false },
@@ -143,17 +143,7 @@ require("snacks").setup({
         end,
     },
     input = { enabled = false },
-    notifier = {
-        enabled = true,
-        timeout = 5000,
-        icons = {
-            error = "",
-            warn = "",
-            info = "",
-            debug = "",
-            trace = "",
-        },
-    },
+    notifier = { enabled = false },
     quickfile = { enabled = false },
     scope = { enabled = false },
     scroll = { enabled = false },
@@ -163,12 +153,6 @@ require("snacks").setup({
             border = "single",
         },
         input = {
-            border = "single",
-        },
-        notification = {
-            border = "single",
-        },
-        notification_history = {
             border = "single",
         },
         scratch = {
@@ -202,16 +186,17 @@ require("snacks").setup({
     },
 })
 
-vim.keymap.set("n", "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
-vim.keymap.set("n", "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
-vim.keymap.set("n", "<leader>z", function() Snacks.zen.zen() end, { desc = "Toggle zen mode" })
-vim.keymap.set(
-    "n",
-    "<leader>|",
-    function()
-        require("virt-column").update({ enabled = not vim.g.virt_column_enabled })
-        vim.g.virt_column_enabled = not vim.g.virt_column_enabled
-        vim.cmd("redraw!")
-    end,
-    { desc = "Toggle virtual column" }
-)
+vim.keymap.set("n", "zM", function()
+    require("ufo").closeAllFolds()
+end, { desc = "Close all folds" })
+vim.keymap.set("n", "zR", function()
+    require("ufo").openAllFolds()
+end, { desc = "Open all folds" })
+vim.keymap.set("n", "<leader>z", function()
+    Snacks.zen.zen()
+end, { desc = "Toggle zen mode" })
+vim.keymap.set("n", "<leader>|", function()
+    require("virt-column").update({ enabled = not vim.g.virt_column_enabled })
+    vim.g.virt_column_enabled = not vim.g.virt_column_enabled
+    vim.cmd("redraw!")
+end, { desc = "Toggle virtual column" })

@@ -51,6 +51,21 @@ require("blink.cmp").setup({
             },
         },
     },
+    cmdline = {
+        enabled = true,
+        keymap = {
+            preset = "none",
+            ["<C-space>"] = { "show", "hide" },
+            ["<Esc>"] = { "cancel", "hide", "fallback" },
+            ["<Tab>"] = { "accept", "fallback" },
+            ["<Up>"] = { "select_prev", "fallback" },
+            ["<Down>"] = { "select_next", "fallback" },
+        },
+        completion = {
+            menu = { auto_show = true },
+            list = { selection = { preselect = true, auto_insert = false } },
+        },
+    },
     keymap = {
         preset = "none",
         ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
