@@ -1,19 +1,13 @@
-vim.api.nvim_create_autocmd("PackChanged", {
-    callback = function(ev)
-        local name, kind = ev.data.spec.name, ev.data.kind
-        if name == "luasnip" and kind == "update" then
-            vim.system({ "make install_jsregexp" }, { cwd = ev.data.path }):wait()
-        end
-    end
-})
-
 vim.pack.add({
     { src = "https://github.com/rafamadriz/friendly-snippets" },
-    { src = "https://github.com/L3MON4D3/LuaSnip",            version = vim.version.range("^2.0.0") },
-    { src = "https://github.com/saghen/blink.cmp",            version = vim.version.range("^1.0.0") },
+    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("^1.0.0") },
 }, { confirm = false })
 
-require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+require("mini.snippets").setup({
+    snippets = { require("mini.snippets").gen_loader.from_lang() },
+    mappings = { expand = "", jump_next = "", jump_prev = "" },
+})
+
 require("blink.cmp").setup({
     appearance = {
         nerd_font_variant = "normal",
@@ -32,7 +26,7 @@ require("blink.cmp").setup({
             draw = {
                 columns = {
                     { "kind_icon" },
-                    { "label",      "label_description", gap = 1 },
+                    { "label", "label_description", gap = 1 },
                     { "source_name" },
                 },
                 components = {
@@ -89,11 +83,11 @@ require("blink.cmp").setup({
             ["markdown"] = {
                 name = "RenderMarkdown",
                 fallbacks = { "lsp" },
-                module = "render-markdown.integ.blink"
-            }
+                module = "render-markdown.integ.blink",
+            },
         },
     },
     snippets = {
-        preset = "luasnip",
+        preset = "mini_snippets",
     },
 })
