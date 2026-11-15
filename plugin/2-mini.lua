@@ -1,9 +1,9 @@
 vim.pack.add({
-    { src = 'https://github.com/nvim-mini/mini.nvim', version = 'stable' },
+    { src = "https://github.com/nvim-mini/mini.nvim", version = "stable" },
 }, { confirm = false })
 
 -- Icons
-require('mini.icons').setup()
+require("mini.icons").setup()
 MiniIcons.mock_nvim_web_devicons()
 
 -- ai
@@ -19,8 +19,8 @@ require("mini.clue").setup({
     },
     triggers = {
         { mode = { "n", "x" }, keys = "<leader>" },
-        { mode = "n",          keys = "[" },
-        { mode = "n",          keys = "]" },
+        { mode = "n", keys = "[" },
+        { mode = "n", keys = "]" },
         { mode = { "n", "x" }, keys = "g" },
         { mode = { "n", "x" }, keys = "z" },
     },
@@ -105,7 +105,9 @@ local function section_git(args)
         return ""
     end
     local root_name = data.root and vim.fn.fnamemodify(data.root, ":t") or ""
-    return add_hl(" " .. root_name, "MiniIconsBlue") .. " " .. add_hl(" " .. (data.head_name or ""), "MiniIconsGreen")
+    return add_hl(" " .. root_name, "MiniIconsBlue")
+        .. " "
+        .. add_hl(" " .. (data.head_name or ""), "MiniIconsGreen")
 end
 
 local function section_diff(args)
@@ -153,9 +155,9 @@ local function section_diagnostics(args)
     end
     local diagnostic_info = {
         [vim.diagnostic.severity.ERROR] = { icon = "", hl = "DiagnosticSignError" },
-        [vim.diagnostic.severity.WARN]  = { icon = "", hl = "DiagnosticSignWarn" },
-        [vim.diagnostic.severity.INFO]  = { icon = "", hl = "DiagnosticSignInfo" },
-        [vim.diagnostic.severity.HINT]  = { icon = "", hl = "DiagnosticSignHint" },
+        [vim.diagnostic.severity.WARN] = { icon = "", hl = "DiagnosticSignWarn" },
+        [vim.diagnostic.severity.INFO] = { icon = "", hl = "DiagnosticSignInfo" },
+        [vim.diagnostic.severity.HINT] = { icon = "", hl = "DiagnosticSignHint" },
     }
     local counts = { [1] = 0, [2] = 0, [3] = 0, [4] = 0 }
     for _, d in ipairs(vim.diagnostic.get(0)) do
@@ -200,7 +202,7 @@ require("mini.statusline").setup({
             local lsp = section_lsp({ trunc_width = 75 })
 
             return statusline.combine_groups({
-                { hl = mode_hl,     strings = { mode } },
+                { hl = mode_hl, strings = { mode } },
                 { hl = filename_hl, strings = { git } },
                 "%<",
                 { hl = filename_hl, strings = { filename } },
@@ -213,3 +215,79 @@ require("mini.statusline").setup({
         end,
     },
 })
+
+-- Tabline
+local function listed_bufs()
+    return vim.tbl_filter(function(b)
+        return vim.bo[b].buflisted
+    end, vim.api.nvim_list_bufs())
+end
+
+local filetype_names = {
+    oil = "Oil",
+    mason = "Mason",
+}
+
+local tab_numbers, tab_count = {}, 0
+
+local function display_name(buf_id, label)
+    local name = filetype_names[vim.bo[buf_id].filetype]
+    if name then
+        return name
+    end
+    -- mini.tabline labels unnamed buffers "*" or "!" (plus an id); the tab
+    -- number already tells them apart
+    if vim.api.nvim_buf_get_name(buf_id) == "" and vim.bo[buf_id].buftype ~= "quickfix" then
+        return "[No Name]"
+    end
+    return label
+end
+
+local function tab_format(buf_id, label)
+    -- Unlisted buffers (e.g. Mason) are numbered after the listed ones
+    local index = tab_numbers[buf_id] or tab_count + 1
+    local filetype = vim.bo[buf_id].filetype
+    local display = display_name(buf_id, label)
+    local icon = filetype_names[filetype] and MiniIcons.get("filetype", filetype) or MiniIcons.get("file", display)
+    local modified = vim.bo[buf_id].modified and " " or ""
+    return string.format(" %d %s %s%s ", index, icon, display, modified)
+end
+
+require("mini.tabline").setup({
+    format = tab_format,
+    tabpage_section = "none",
+})
+
+local make_tabline_string = MiniTabline.make_tabline_string
+MiniTabline.make_tabline_string = function()
+    local bufs = listed_bufs()
+    tab_numbers, tab_count = {}, #bufs
+    for i, b in ipairs(bufs) do
+        tab_numbers[b] = i
+    end
+
+    local tabline = make_tabline_string()
+    local buf_id = vim.api.nvim_get_current_buf()
+    local name = filetype_names[vim.bo[buf_id].filetype]
+    if tabline == "" or not name or vim.bo[buf_id].buflisted then
+        return tabline
+    end
+    local label = tab_format(buf_id, name):gsub("%%", "%%%%")
+    return tabline .. "%#MiniTablineCurrent#" .. label .. "%#MiniTablineFill#"
+end
+
+local function jump_to_buffer(buf_id)
+    if buf_id then
+        vim.api.nvim_set_current_buf(buf_id)
+    end
+end
+
+for i = 1, 9 do
+    vim.keymap.set({ "n", "i" }, "<C-" .. i .. ">", function()
+        jump_to_buffer(listed_bufs()[i])
+    end, { desc = "Buffer " .. i })
+end
+vim.keymap.set({ "n", "i" }, "<C-0>", function()
+    local bufs = listed_bufs()
+    jump_to_buffer(bufs[#bufs])
+end, { desc = "Last buffer" })
