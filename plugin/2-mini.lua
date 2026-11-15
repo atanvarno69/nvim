@@ -298,3 +298,24 @@ vim.keymap.set({ "n", "i" }, "<C-0>", function()
     local bufs = listed_bufs()
     jump_to_buffer(bufs[#bufs])
 end, { desc = "Last buffer" })
+
+-- Highlight TODO-style keywords in comments (e.g. `TODO:`)
+local function keyword_highlighter(words, group)
+    local patterns = {}
+    for _, word in ipairs(words) do
+        patterns[#patterns + 1] = "%f[%w]()" .. word .. "()%f[%W]:"
+    end
+    return { pattern = patterns, group = group }
+end
+
+require("mini.hipatterns").setup({
+    highlighters = {
+        fixme = keyword_highlighter({ "FIXME", "FIX", "BUG", "FIXIT", "ISSUE" }, "MiniHipatternsFixme"),
+        hack = keyword_highlighter(
+            { "HACK", "WARN", "WARNING", "XXX", "PERF", "OPTIM", "PERFORMANCE", "OPTIMIZE" },
+            "MiniHipatternsHack"
+        ),
+        todo = keyword_highlighter({ "TODO" }, "MiniHipatternsTodo"),
+        note = keyword_highlighter({ "NOTE", "INFO" }, "MiniHipatternsNote"),
+    },
+})
