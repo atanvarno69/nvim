@@ -3,7 +3,8 @@ vim.pack.add({
     "https://github.com/lukas-reineke/virt-column.nvim",
     "https://github.com/kevinhwang91/promise-async",
     "https://github.com/kevinhwang91/nvim-ufo",
-    "https://github.com/folke/snacks.nvim",
+    "https://github.com/lukas-reineke/indent-blankline.nvim",
+    "https://github.com/folke/zen-mode.nvim",
     "https://github.com/j-hui/fidget.nvim",
 }, { confirm = false })
 
@@ -121,69 +122,38 @@ require("vim._core.ui2").enable({
 
 require("fidget").setup({})
 
-require("snacks").setup({
-    bigfile = { enabled = false },
-    dashboard = { enabled = false },
-    dim = {
-        animate = { enabled = false },
-    },
-    image = { enabled = false },
+require("ibl").setup({
     indent = {
-        indent = {
-            char = "│",
-            hl = { "rainbow6", "rainbow5", "rainbow4", "rainbow3", "rainbow2", "rainbow1" },
-        },
-        animate = { enabled = false },
-        scope = { hl = "Keyword" },
-        filter = function(buf)
-            return vim.g.snacks_indent ~= false
-                and vim.b[buf].snacks_indent ~= false
-                and vim.bo[buf].buftype == ""
-                and vim.bo[buf].filetype ~= "markdown"
-        end,
+        char = "│",
+        highlight = { "rainbow6", "rainbow5", "rainbow4", "rainbow3", "rainbow2", "rainbow1" },
     },
-    input = { enabled = false },
-    notifier = { enabled = false },
-    quickfile = { enabled = false },
-    scope = { enabled = false },
-    scroll = { enabled = false },
-    statuscolumn = { enabled = false },
-    styles = {
-        blame_line = {
-            border = "single",
-        },
-        input = {
-            border = "single",
-        },
-        scratch = {
-            border = "single",
-        },
+    scope = {
+        highlight = "Keyword",
+        show_start = false,
+        show_end = false,
     },
-    words = { enabled = false },
-    zen = {
-        toggles = {
-            dim = false,
-        },
-        show = {
-            statusline = true,
-        },
-        win = {
-            backdrop = { transparent = false, blend = 99 },
-            width = 120,
-            wo = { number = false, foldcolumn = "0", signcolumn = "no", statuscolumn = "" },
-        },
-        on_open = function(win)
-            require("virt-column").setup_buffer(vim.api.nvim_get_current_buf(), { enabled = false })
-            require("ufo").openAllFolds()
-            require("ufo").disable()
-            require("snacks").indent.disable()
-        end,
-        on_close = function(win)
-            require("virt-column").setup_buffer(vim.api.nvim_get_current_buf(), { enabled = true })
-            require("ufo").enable()
-            require("snacks").indent.enable()
-        end,
+    exclude = { filetypes = { "markdown" } },
+})
+
+require("zen-mode").setup({
+    window = {
+        backdrop = 1,
+        width = 120,
+        options = { number = false, foldcolumn = "0", signcolumn = "no", statuscolumn = "" },
     },
+    on_open = function()
+        local buf = vim.api.nvim_get_current_buf()
+        require("virt-column").setup_buffer(buf, { enabled = false })
+        require("ufo").openAllFolds()
+        require("ufo").disable()
+        require("ibl").setup_buffer(buf, { enabled = false })
+    end,
+    on_close = function()
+        local buf = vim.api.nvim_get_current_buf()
+        require("virt-column").setup_buffer(buf, { enabled = true })
+        require("ufo").enable()
+        require("ibl").setup_buffer(buf, { enabled = true })
+    end,
 })
 
 vim.keymap.set("n", "zM", function()
@@ -193,7 +163,7 @@ vim.keymap.set("n", "zR", function()
     require("ufo").openAllFolds()
 end, { desc = "Open all folds" })
 vim.keymap.set("n", "<leader>z", function()
-    Snacks.zen.zen()
+    require("zen-mode").toggle()
 end, { desc = "Toggle zen mode" })
 vim.keymap.set("n", "<leader>|", function()
     require("virt-column").update({ enabled = not vim.g.virt_column_enabled })
